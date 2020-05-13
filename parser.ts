@@ -69,13 +69,13 @@ export function parseArgs(input:string, com:Command):CommandArgs|string {
             if (flag.value) {
                 activeFlag = {
                     name: flag.long,
-                    shortcutUsed: false,
+                    shortcutUsed: true,
                     value: null
                 }
             } else {
                 a.flags.push({
                     name: flag.long,
-                    shortcutUsed: false,
+                    shortcutUsed: true,
                     value: null
                 })
             }
