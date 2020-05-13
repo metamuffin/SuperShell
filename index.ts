@@ -1,52 +1,53 @@
 import { readSync, openSync } from "fs"
+import { Command } from './command';
+import { Prompt } from './input';
+import { parseArgs } from './parser';
+import { loadCommands } from './commands/loader';
 
-/*
-    Position the Cursor: \033[<L>;<C>H or \033[<L>;<C>f (puts the cursor at line L and column C)
-    Move the cursor up N lines: \033[<N>A
-    Move the cursor down N lines: \033[<N>B
-    Move the cursor forward N columns: \033[<N>C
-    Move the cursor backward N columns: \033[<N>D
-    Clear the screen, move to (0,0): \033[2J
-    Erase to end of line: \033[K
-    Save cursor position: \033[s
-    Restore cursor position: \033[u
-*/
+const prompt = require("prompt-sync")()
 
+export class Shell {
+    public static commands:Array<Command> = [];
 
-function mainPrompt(){
-    
-    var fd = (process.platform === 'win32') ?
-      0 :
-      openSync('/dev/tty', 'rs');
-
-    var buffer = Buffer.alloc(3)
-    process.stdin.setRawMode(true)
-
-    while(1){
-        var read = readSync(fd,buffer,0,3,null);
-        if (read > 0){
-            var char = buffer[read-1];
-            var out = String.fromCharCode(char)
-
-            if (char == 9) out = "Autocomplete is not avalible."
-            if (char == 3) process.exit(130); // ^C
-
-
-            if (char == 127 || char == 8) {
-                out = '\u001b[1D'
-            }
-
-
-            
-
-            process.stdout.write(out)
-        }
+    public static init(){
+        loadCommands()
+        console.log("SuperShell  [Version 10.0.18363.778]")
+        console.log("(c) 2020 MetaMuffif Corporation. Alle Blubs vorbehalten.");
 
     }
 
-    process.stdin.setRawMode(false)
+
+    public static mainPrompt(){
+        var i:string = Prompt.prompt()
+        i = i.trim()
+        console.log();
+        if (i == "") return
+        
+        var isplit = i.split(" ")
+        var cname = isplit.shift()
+        var cargs_raw = isplit.join(" ")
+        var c = this.commands.find((c) => c.name == cname)
+        if (!c) {
+            this.error("superlel: command not found, not avalible, not working, too busy, no want or anything else went wrong.")
+            return
+        }
+        var cargs = parseArgs(cargs_raw,c)
+        if (typeof cargs == "string"){
+            this.error(cargs);
+            return
+        }
+        
+        c.handle(cargs)
+    }
+
+    public static log(s:any){
+        console.log(s)
+    }
+
+    public static error(s:any){
+        console.warn(s)
+    }
 }
 
-
-mainPrompt()
-
+Shell.init()
+while(1) Shell.mainPrompt()
