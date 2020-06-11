@@ -116,3 +116,13 @@ export var cList:Command = {
         return 0
     }
 }
+
+export var cExit:Command = {
+    name: "exit",
+    info: "Try to exit this shell",
+    flags: [],
+    handle: async () => {
+        Shell.error("You can't!")
+        return 1
+    }
+}
