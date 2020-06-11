@@ -8,7 +8,7 @@ export var cHelp:Command = {
     name: "help",
     flags: [],
     info: "Get hacker help.",
-    handle: (a) => {
+    handle: async (a) => {
         Shell.log("plshelp: Real hackers dont need this")
         return 0
     }
@@ -18,7 +18,7 @@ export var cPlsHelp:Command = {
     name: "plshelp",
     flags: [],
     info: "Get help.",
-    handle: (a) => {
+    handle: async (a) => {
         if (!a.args[0]){
             Shell.error("Too few arguments. Take a look at the help file for this command.")
             return 1

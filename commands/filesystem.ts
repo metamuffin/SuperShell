@@ -59,7 +59,7 @@ export var cGo:Command = {
     name: "go",
     flags: [],
     info: "GO into a directory.",
-    handle: (a) => {
+    handle: async (a) => {
         if (!a.args[0]){
             Shell.log("Bruh. Tell me where to go please!")
             return 1
@@ -80,7 +80,7 @@ export var cCWD:Command = {
             value: false
         }
     ],
-    handle: (a) => {
+    handle: async (a) => {
         var o = Filesystem.getCWD()
         if (a.flags.find(f => f.name == "windows") != null) o = o.replace("/","\\")
         Shell.log(o)
@@ -99,7 +99,7 @@ export var cList:Command = {
             value: false
         }
     ],
-    handle: (a) => {
+    handle: async (a) => {
         var path = Filesystem.pathFromString(a.args[0]) || Filesystem.currentPath
         var dir = Filesystem.list(path)
         var out = `Contents of ${Filesystem.stringFromPath(path)}\n`

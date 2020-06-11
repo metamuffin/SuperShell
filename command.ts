@@ -6,5 +6,5 @@ export interface Command {
     name: string,
     info: string,
     flags: CommandArgsRules,
-    handle: (args:CommandArgs) => number
+    handle: (args:CommandArgs) => Promise<number>
 }

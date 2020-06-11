@@ -21,7 +21,7 @@ export var cTest:Command = {
         }
     ],
     info: "Test it!",
-    handle: (a) => {
+    handle: async (a) => {
         Shell.log(a);
         return 0
     }
