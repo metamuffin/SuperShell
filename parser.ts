@@ -107,7 +107,7 @@ export function splitQuotes(input:string):Array<string> {
             quotes = null;
             continue
         }
-        if (quotes.search(char) != -1) {
+        if (quotes.indexOf(char) != -1) {
             cquotes = char;
             continue
         }

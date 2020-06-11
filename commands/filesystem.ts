@@ -102,7 +102,7 @@ export var cList:Command = {
     handle: (a) => {
         var path = Filesystem.pathFromString(a.args[0]) || Filesystem.currentPath
         var dir = Filesystem.list(path)
-        var out = `Contents of ${Filesystem.stringFromPath(path)}`
+        var out = `Contents of ${Filesystem.stringFromPath(path)}\n`
         for (const f of dir) {
             if (f.startsWith(".") && (a.flags.findIndex((f) => f.name = "showhidden") == -1)) continue
             var fpath = Filesystem.stringFromPath([...path, f])
