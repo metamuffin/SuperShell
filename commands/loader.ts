@@ -1,7 +1,7 @@
 import { Shell } from "..";
 import { cTest } from './test';
 import { cHelp, cPlsHelp } from './help';
-import { cCWD, cGo, cList } from './filesystem';
+import { cCWD, cGo, cList, cExit, cReload } from './filesystem';
 
 
 
@@ -13,6 +13,8 @@ export function loadCommands(){
         cPlsHelp,
         cCWD,
         cGo,
-        cList
+        cList,
+        cExit,
+        cReload
     ]
 }

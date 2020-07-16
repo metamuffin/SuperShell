@@ -1,6 +1,7 @@
 import { Command } from '../command';
 import { Shell } from '../index';
 import { readdirSync, stat, statSync } from 'fs';
+import { exec, execSync } from 'child_process';
 
 export type FPath = Array<string>
 
@@ -37,7 +38,7 @@ export class Filesystem {
                 return 1
             }
         } else {
-            Shell.log("go: Directory not found")
+            Shell.log("go: Directory not found, maybe run ls first next time.")
             return 1
         }
         return 0
@@ -57,9 +58,24 @@ export class Filesystem {
 
 export var cGo:Command = {
     name: "go",
-    flags: [],
+    flags: [
+        {
+            short: "p",
+            long: "parent-directory",
+            info: "Go to the parent directory",
+            value: false
+        }
+    ],
     info: "GO into a directory.",
     handle: async (a) => {
+        if (a.flags.find(f => f.name == "parent-directory") != null) {
+            var k = Filesystem.currentPath.pop();
+            if (!k) {
+                Shell.log("You cant go any higher then this.")
+                return 1
+            }
+            return 0
+        }
         if (!a.args[0]){
             Shell.log("Bruh. Tell me where to go please!")
             return 1
@@ -114,6 +130,15 @@ export var cList:Command = {
         }
         Shell.log(out)
         return 0
+    }
+}
+
+export var cReload:Command = {
+    name: "reload",
+    info: "Reload all commands. Only works in the debug container.",
+    flags: [],
+    handle: async () => {
+        process.exit(123);
     }
 }
 
