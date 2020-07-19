@@ -55,12 +55,12 @@ export class Shell {
             var ret = await this.mainPrompt()
             if (ret == 0) continue
             if (ret > 0) {
-                await sleep(3000)
+                await sleep(30)
                 Shell.clear()
                 Shell.log("\n :(\n")
                 Shell.log(" It looks like your SuperShell implementation run into a problem.");
                 Shell.log(" We (actually nobody) will just collect some personal data and then we will restart your Shell. ")
-                await sleep(10000)
+                await sleep(100)
                 Shell.clear()
             }
         }
@@ -75,11 +75,12 @@ export class Shell {
     public static userMove(o: CursorPos) {
         this.cursorPos.x += o.x
         this.cursorPos.y += o.y
-        this.promptOrigin.x = this.cursorPos.x
-        this.promptOrigin.y = this.cursorPos.y
+        this.promptOrigin.x += o.x
+        this.promptOrigin.y = o.y
 
         if (this.promptOrigin.x < 0) {
-            this.promptOrigin.x -= 1
+            this.promptOrigin.x = 0
+            this.cursorPos.x = 0
         } else {
             if (o.x != 0) process.stdout.write(`\u001b[${Math.abs(o.x)}${(o.x < 0) ? 'D' : 'C'}`);
             if (o.y != 0) process.stdout.write(`\u001b[${Math.abs(o.y)}${(o.y < 0) ? 'B' : 'A'}`);
@@ -109,6 +110,7 @@ export class Shell {
                     if (leftStr.startsWith("\u001b[1D")){ Shell.userMove({x: -1, y: 0}) }
                     if (leftStr.startsWith("\u001b[1C")){ Shell.userMove({x: 1, y: 0}) }    
                 } else {
+                    this.cursorPos.x++;
                     process.stdout.write(s.charAt(i));
                 }
             }

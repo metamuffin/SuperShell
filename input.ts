@@ -72,7 +72,6 @@ export class Prompt {
                     log_cursor += 1;
                 }
                 
-                //process.stdout.write(out)
                 Shell.write(out)
                 
             }
