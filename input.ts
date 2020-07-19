@@ -1,4 +1,5 @@
 import { openSync, readSync } from "fs";
+import { Shell } from ".";
 
 
 /*
@@ -17,14 +18,14 @@ import { openSync, readSync } from "fs";
 export class Prompt {
 
 
-
     public static prompt(){
 
         var log_str:string = ""
         var log_cursor:number = 0
+        
         var fd:number = openSync('/dev/tty', 'rs');
         var buffer:Buffer = Buffer.alloc(3)
-        process.stdout.write("SUPERSHELL>")
+        Shell.write("SUPERSHELL>")
         process.stdin.setRawMode(true)
         while(1){
             var read = readSync(fd,buffer,0,3,null);
@@ -46,7 +47,7 @@ export class Prompt {
                         out = "\u001b[1D"
                         log_cursor -= (log_cursor) ? 1 : 0
                     }
-                    if (bufstr == "\u001b[C"){ // LEFT
+                    if (bufstr == "\u001b[C"){ // RIGHT
                         out = "\u001b[1C"
                     }
                 }
@@ -71,7 +72,8 @@ export class Prompt {
                     log_cursor += 1;
                 }
                 
-                process.stdout.write(out)
+                //process.stdout.write(out)
+                Shell.write(out)
                 
             }
 

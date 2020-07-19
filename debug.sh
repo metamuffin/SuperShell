@@ -1,6 +1,7 @@
+#!/bin/bash
 
-
-while true; do
+ts-node index.ts
+while [[ $? -eq 123 ]]; do
+    echo 'Reloading shell...'
     ts-node index.ts
-    [$? == 123] || break
 done
